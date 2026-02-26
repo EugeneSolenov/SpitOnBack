@@ -35,6 +35,8 @@
 )
 
 ### 5. Конвертация суммы 150 USD -> RUB
-![Внешний запрос 5] screenshotes/Внешнее api 150 рублей в доллары.png
+![Внешний запрос 5] <img width="1919" height="1126" alt="Внешнее api 150 рублей в доллары" src="https://github.com/user-attachments/assets/44a2fae0-b3f1-4281-a3f4-2de4a572a4d5" />
+
+
 
 
