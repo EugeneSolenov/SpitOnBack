@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Приложение для заметок с офлайн-доступом и установкой как PWA." />
+    <meta name="theme-color" content="#17171a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Заметки" />
+    <title>Заметки</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" href="icons/icon-64.png" sizes="64x64" type="image/png" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="sidebar__title">Заметки</div>
+
+        <section class="sidebar-notes" aria-labelledby="notes-title">
+          <div class="sidebar-notes__header">
+            <h2 id="notes-title">Мои заметки</h2>
+            <p id="notes-meta">0 заметок</p>
+          </div>
+
+          <div id="notes-grid" class="notes-list"></div>
+        </section>
+      </aside>
+
+      <div class="workspace">
+        <header class="main-header">
+          <div class="searchbar">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="6" />
+              <path d="M20 20l-4.2-4.2" />
+            </svg>
+            <input id="search-input" type="search" placeholder="Поиск заметок" autocomplete="off" />
+          </div>
+        </header>
+
+        <main class="content">
+          <section id="editor-card" class="quick-note" aria-labelledby="editor-title">
+            <button id="composer-trigger" class="quick-note__collapsed" type="button">
+              <span>Создать заметку</span>
+            </button>
+
+            <form id="note-form" class="editor" autocomplete="off" hidden>
+              <div class="editor__header">
+                <input
+                  id="note-title"
+                  name="title"
+                  type="text"
+                  maxlength="80"
+                  placeholder="Заголовок"
+                  aria-label="Заголовок заметки"
+                />
+                <p id="editor-date" class="editor__date">Создано только что</p>
+              </div>
+
+              <label class="editor__body" for="note-body">
+                <span class="visually-hidden">Текст заметки</span>
+                <textarea
+                  id="note-body"
+                  name="body"
+                  rows="8"
+                  maxlength="600"
+                  placeholder="Заметка"
+                ></textarea>
+                <div id="note-preview" class="editor__preview" hidden></div>
+              </label>
+
+              <div class="editor__toolbar">
+                <div class="toolbar-submit">
+                  <button id="delete-note-button" class="button button--danger" type="button" hidden>Удалить</button>
+                  <button id="close-editor-button" class="button button--secondary" type="button">Закрыть</button>
+                  <button class="button button--primary" type="submit">Сохранить</button>
+                </div>
+              </div>
+            </form>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="fab-stack" aria-label="Быстрые действия">
+      <button id="note-fab" class="fab" type="button" aria-label="Создать текстовую заметку">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M4 20l4.5-1l9.8-9.8l-3.5-3.5L5 15.5z" />
+          <path d="M13.5 6.5l3.5 3.5" />
+        </svg>
+      </button>
+    </div>
+
+    <template id="note-card-template">
+      <article class="note-card" tabindex="0">
+        <h3 class="note-card__title"></h3>
+      </article>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

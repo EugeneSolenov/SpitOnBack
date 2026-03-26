@@ -1,0 +1,10 @@
+{
+  "name": "pr13-service-worker-notes",
+  "version": "1.0.0",
+  "description": "Practice 13 notes app with offline support via Service Worker",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "smoke": "node smoke-test.js"
+  }
+}
