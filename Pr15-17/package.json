@@ -1,0 +1,17 @@
+{
+  "name": "pr15-16-notes-realtime",
+  "version": "1.0.0",
+  "description": "Notes app for practices 15-16 with App Shell, Socket.IO and push notifications",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "smoke": "node smoke-test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "selfsigned": "^5.5.0",
+    "socket.io": "^4.8.3",
+    "web-push": "^3.6.7"
+  }
+}

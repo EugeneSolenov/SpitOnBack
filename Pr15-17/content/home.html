@@ -1,0 +1,44 @@
+<section id="editor-card" class="quick-note" aria-labelledby="editor-title">
+  <button id="composer-trigger" class="quick-note__collapsed" type="button">
+    <span>Создать заметку</span>
+  </button>
+
+  <form id="note-form" class="editor" autocomplete="off" hidden>
+    <div class="editor__header">
+      <input
+        id="note-title"
+        name="title"
+        type="text"
+        maxlength="80"
+        placeholder="Заголовок"
+        aria-label="Заголовок заметки"
+      />
+      <div class="editor__meta-row">
+        <p id="editor-date" class="editor__date">Создано только что</p>
+        <label class="editor__reminder" for="note-reminder">
+          <span>Напомнить</span>
+          <input id="note-reminder" name="reminder" type="datetime-local" />
+        </label>
+      </div>
+    </div>
+
+    <label class="editor__body" for="note-body">
+      <span class="visually-hidden">Текст заметки</span>
+      <textarea
+        id="note-body"
+        name="body"
+        rows="8"
+        maxlength="600"
+        placeholder="Заметка"
+      ></textarea>
+    </label>
+
+    <div class="editor__toolbar">
+      <div class="toolbar-submit">
+        <button id="delete-note-button" class="button button--danger" type="button" hidden>Удалить</button>
+        <button id="close-editor-button" class="button button--secondary" type="button">Закрыть</button>
+        <button class="button button--primary" type="submit">Сохранить</button>
+      </div>
+    </div>
+  </form>
+</section>
