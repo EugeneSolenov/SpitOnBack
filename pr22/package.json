@@ -1,0 +1,26 @@
+{
+  "name": "pr22-load-balancing",
+  "version": "1.0.0",
+  "description": "Practice 22 load balancing demo with Nginx and HAProxy",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "start:local": "node scripts/start-local-backends.js",
+    "compose:up": "docker compose up -d --build",
+    "compose:down": "docker compose down",
+    "test:balance": "node scripts/test-balancers.js",
+    "test:failover": "node scripts/test-failover.js"
+  },
+  "keywords": [
+    "load-balancing",
+    "nginx",
+    "haproxy",
+    "express"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

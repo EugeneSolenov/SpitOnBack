@@ -1,0 +1,244 @@
+===== PAGE 1 =====
+ДИСЦИПЛИНАФронтенд и бэкенд разработка
+ИНСТИТУТИПТИП
+КАФЕДРАИндустриального программирования
+ВИД УЧЕБНОГО 
+МАТЕРИАЛА
+Методические указания к практическим занятиям по 
+дисциплине
+ПРЕПОДАВАТЕЛЬЗагородних Николай Анатольевич
+Краснослободцева Дарья Борисовна
+СЕМЕСТР4 семестр, 2025/2026 уч. год
+Практическое занятие 19
+Работа с реляционными СУБД на примере PostgreSQL
+Рассмотрим процесс работы с реляционными системами управления базами данных
+на примере СУБД PostgreSQL. Решение практического задания осуществляется внутри
+соответствующей рабочей тетради, расположенной в СДО.
+Введение в реляционные базы данных и PostgreSQL
+Реляционные базы данных (РБД) представляют собой организованную систему
+хранения данных, основанную на таблицах с четко определенными связями между
+ними. В отличие от NoSQL-решений, таких как MongoDB, реляционные СУБД требуют
+предварительного определения схемы данных и используют язык SQL (Structured
+Query Language) для манипуляции информацией.
+PostgreSQL — это мощная, открытая объектно-реляционная СУБД, поддерживающая
+сложные запросы, транзакции, индексы и механизмы репликации. Ее расширяемость и
+соответствие стандартам SQL делают ее популярным выбором для enterprise-
+решений.
+Установка и настройка PostgreSQL
+Перед началом работы необходимо установить PostgreSQL. Доступны варианты
+локальной установки или использования облачного сервиса (например, ElephantSQL).
+1. Локальная установка
+На Windows: загрузить инсталлятор с официального сайта и следовать
+инструкциям.
+На Linux (Ubuntu/Debian):
+sudoapt-getinstall postgresql postgresql-contrib
+sudoservice postgresql start
+
+===== PAGE 2 =====
+Подключение PostgreSQL к Node.js-приложению
+Для работы с PostgreSQL в Node.js используются библиотеки 
+pg
+ (низкоуровневый
+драйвер) или ORM (Sequelize, TypeORM). В данном примере рассмотрим 
+pg
+ и
+Sequelize
+.
+После установки сервер PostgreSQL будет доступен на 
+localhost:5432
+. Для
+подключения используется клиент 
+psql
+ или графические инструменты
+(pgAdmin, DBeaver).
+2. Облачное решение (ElephantSQL)
+Регистрация на ElephantSQL.
+Создание инстанса (бесплатный план 
+Tiny Turtle
+).
+Получение строки подключения:
+postgres://<username>:<password>@<host>:5432/<database>
+1. Инициализация проекта
+Устанавливаем зависимости:
+npm init -y
+npminstall pg sequelize express
+2. Подключение через 
+pg
+Создаем файл 
+server.js
+:
+Для облачного подключения конфигурация будет выглядеть так:
+const{Pool}=require('pg');
+const express =require('express');
+const app =express();
+const pool =newPool({
+user:'postgres',
+host:'localhost',
+database:'mydatabase',
+password:'password',
+port:5432,
+});
+app.use(express.json());
+app.listen(3000,()=>{
+console.log('Server is running on http://localhost:3000');
+});
+const pool =newPool({
+connectionString:'postgres://user:password@host:5432/database',
+
+===== PAGE 3 =====
+Определение моделей и связей
+В отличие от MongoDB, в PostgreSQL необходимо предварительно создать таблицы.
+Рассмотрим пример модели "Пользователь" и "Задача" с отношением "один-ко-
+многим".
+ssl:{rejectUnauthorized:false},
+});
+3. Подключение через Sequelize
+Sequelize — это ORM (Object-Relational Mapping), который абстрагирует работу с
+SQL. Инициализация:
+const{Sequelize}=require('sequelize');
+const sequelize =newSequelize('mydatabase','postgres','password',{
+host:'localhost',
+dialect:'postgres',
+});
+// Проверка подключения
+sequelize.authenticate()
+.then(()=>console.log('Connected to PostgreSQL'))
+.catch(err=>console.error('Connection error:', err));
+1. Создание таблиц через SQL
+CREATETABLE users (
+id SERIALPRIMARYKEY,
+name VARCHAR(100)NOTNULL,
+email VARCHAR(100)UNIQUENOTNULL,
+created_at TIMESTAMPDEFAULTNOW()
+);
+CREATETABLE tasks (
+id SERIALPRIMARYKEY,
+title VARCHAR(100)NOTNULL,
+user_id INTEGERREFERENCES users(id),
+completed BOOLEANDEFAULTfalse
+);
+2. Определение моделей в Sequelize
+constUser= sequelize.define('User',{
+name:{type:DataTypes.STRING,allowNull:false},
+email:{type:DataTypes.STRING,unique:true},
+});
+constTask= sequelize.define('Task',{
+title:{type:DataTypes.STRING},
+
+===== PAGE 4 =====
+CRUD-операции в PostgreSQL
+1. Создание записи (Create)
+Добавление пользователя через Sequelize:
+2. Чтение данных (Read)
+Получение пользователей с задачами (JOIN через Sequelize):
+3. Обновление данных (Update)
+Изменение данных пользователя:
+completed:{type:DataTypes.BOOLEAN,defaultValue:false},
+});
+// Связь 1:N
+User.hasMany(Task);
+Task.belongsTo(User);
+// Синхронизация с БД
+sequelize.sync({force:true});// Опция `force` пересоздает таблицы
+app.post('/users',async(req, res)=>{
+try{
+const user =awaitUser.create(req.body);
+res.status(201).send(user);
+}catch(err){
+res.status(400).send(err.message);
+}
+});
+app.get('/users',async(req, res)=>{
+try{
+const users =awaitUser.findAll({include:Task});
+res.send(users);
+}catch(err){
+res.status(500).send(err.message);
+}
+});
+app.patch('/users/:id',async(req, res)=>{
+try{
+const user =awaitUser.update(req.body,{
+where:{id: req.params.id},
+returning:true,// Для PostgreSQL (возвращает обновленную
+
+===== PAGE 5 =====
+4. Удаление данных (Delete)
+Удаление пользователя:
+Сложные запросы и транзакции
+Интеграция с фронтендом
+Пример запроса с фронтенда (Fetch API):
+запись)
+});
+res.send(user);
+}catch(err){
+res.status(400).send(err.message);
+}
+});
+app.delete('/users/:id',async(req, res)=>{
+try{
+awaitUser.destroy({where:{id: req.params.id}});
+res.send({message:'User deleted'});
+}catch(err){
+res.status(500).send(err.message);
+}
+});
+1. Транзакции
+Обеспечивают атомарность операций:
+const result =await sequelize.transaction(async(t)=>{
+const user =awaitUser.create({name:'John'},{transaction: t 
+});
+awaitTask.create({title:'Learn SQL',userId: user.id},{
+transaction: t });
+return user;
+});
+2. Агрегация
+Пример: подсчет задач по пользователям:
+const stats =awaitTask.findAll({
+attributes:[
+'userId',
+[Sequelize.fn('COUNT',Sequelize.col('id')),'taskCount'],
+],
+group:['userId'],
+});
+
+===== PAGE 6 =====
+Оптимизация
+Практическое задание
+Создайте простое API для управления списком пользователей. Необходимо
+реализовать серверное приложение с подключением базы данных PostgreSQL для
+хранения информации о пользователях.
+Сущность 
+Пользователь
+ должна включать следующий минимальный набор полей
+(можно добавлять свои):
+ПолеТип данныхОписание
+IDIntegerУникальный идентификатор пользователя
+first_nameVarcharИмя пользователя
+last_nameVarcharФамилия пользователя
+ageIntegerВозраст пользователя
+created_atTimestampВремя создания пользователя в unix
+updated_atTimestampВремя обновления пользователя в unix
+Список маршрутов должен включать следующий минимальный перечень энд-поинтов
+(можно добавлять свои):
+АдресМетодОписание
+/api/usersPOSTСоздание нового пользователя
+/api/usersGETПолучение списка пользователей
+/api/users/:idGETПолучение конкретного пользователя
+/api/users/:idPATCHОбновление информации пользователя
+/api/users/:idDELETEУдаление пользователя
+fetch('http://localhost:3000/users')
+.then(response=> response.json())
+.then(data=>console.log(data));
+Индексы — ускоряют поиск:
+CREATEINDEX idx_users_email ON users(email);
+Репликация — повышает отказоустойчивость (настройка в 
+postgresql.conf
+).
+Warning
+
+===== PAGE 7 =====
+Формат отчета
+В качестве ответа на задание необходимо прикрепить ссылку на репозиторий с
+реализованной практикой.
+Обязательно связать логику каждого маршрута с базой данных PostgreSQL!

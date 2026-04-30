@@ -1,0 +1,63 @@
+x-backend: &backend
+  build: .
+  restart: unless-stopped
+  healthcheck:
+    test:
+      [
+        "CMD-SHELL",
+        "node -e \"fetch('http://127.0.0.1:3000/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""
+      ]
+    interval: 5s
+    timeout: 3s
+    retries: 5
+    start_period: 5s
+
+services:
+  backend1:
+    <<: *backend
+    environment:
+      INSTANCE_NAME: backend-1
+      PORT: 3000
+    ports:
+      - "3200:3000"
+
+  backend2:
+    <<: *backend
+    environment:
+      INSTANCE_NAME: backend-2
+      PORT: 3000
+    ports:
+      - "3201:3000"
+
+  backend3:
+    <<: *backend
+    environment:
+      INSTANCE_NAME: backend-backup
+      PORT: 3000
+    ports:
+      - "3202:3000"
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+
+  haproxy:
+    image: haproxy:3.0-alpine
+    restart: unless-stopped
+    depends_on:
+      - backend1
+      - backend2
+      - backend3
+    ports:
+      - "8081:80"
+      - "8404:8404"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro
