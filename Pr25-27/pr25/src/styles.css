@@ -1,0 +1,174 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #172033;
+  background: #f3f6fb;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.app {
+  width: min(980px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: center;
+  padding: 22px 0;
+}
+
+.label {
+  margin: 0 0 6px;
+  color: #3f6fd8;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0;
+  font-size: 34px;
+  line-height: 1.15;
+}
+
+h2 {
+  margin-bottom: 14px;
+  font-size: 30px;
+  line-height: 1.2;
+}
+
+h3 {
+  margin-bottom: 10px;
+  font-size: 19px;
+}
+
+p {
+  line-height: 1.6;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nav a {
+  padding: 10px 14px;
+  border: 1px solid #cbd6ea;
+  border-radius: 8px;
+  background: #ffffff;
+  font-weight: 700;
+}
+
+.nav a.active {
+  color: #ffffff;
+  border-color: #2455bf;
+  background: #2455bf;
+}
+
+.page {
+  padding: 28px 0;
+}
+
+.hero,
+.panel,
+.grid article,
+.list div {
+  border: 1px solid #dce4f2;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 12px 30px rgba(38, 57, 92, 0.08);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 34px;
+}
+
+.summary {
+  display: grid;
+  gap: 12px;
+}
+
+.summary span {
+  display: block;
+  padding: 12px 14px;
+  border-radius: 8px;
+  color: #16326f;
+  background: #e8eefb;
+  font-weight: 700;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.grid article,
+.panel,
+.list div {
+  padding: 22px;
+}
+
+.list {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.list div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.list span {
+  color: #3f6fd8;
+  font-weight: 700;
+}
+
+@media (max-width: 720px) {
+  .header,
+  .hero,
+  .list div {
+    display: block;
+  }
+
+  .nav {
+    margin-top: 18px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .summary {
+    margin-top: 20px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+}
